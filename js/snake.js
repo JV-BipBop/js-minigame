@@ -1,26 +1,29 @@
-let snake = null;
-let piece = null;
-let pieceOn = false;
+let snake = null; // Array da cobra 
+let piece = null; // Comida
+let pieceOn = false; // Evita criar várias comidas
 
-nome_jogo.innerText = "Cobrinha";
+nome_jogo.innerText = "Cobrinha"; // Nome do jogo
 
+// Cria cobra
 function start(){
   head = newPiece(0, 0); // Cria peça na posição (0,0)
   head.id = "head";
   direction = 39; // para direita
   snake = [head];
   pieceOn = false;
-  createRandomPiece(Math.floor(Math.random() * 9) * 20, Math.floor(Math.random() * 9) * 40);
+  createRandomPiece(Math.floor(Math.random() * 9) * 20, Math.floor(Math.random() * 9) * 40); // Gera comida
 }
 
+// Move, verifica colisão, etc.
 function loop(){
-  createRandomPiece(Math.floor(Math.random() * 9) * 20, Math.floor(Math.random() * 9) * 40);
-  eatPiece();
-  refreshTail();
-  move();
-  if(gameOver()) return;
+  createRandomPiece(Math.floor(Math.random() * 9) * 20, Math.floor(Math.random() * 9) * 40); // Gera comida (se não existir)
+  eatPiece(); // Verifica se comeu
+  refreshTail(); // Atualiza corpo
+  move(); // Move a cabeça
+  if(gameOver()) return; // Verifica 'game over'
 }
 
+// Movimento da cabeça
 function move(){
   switch (direction) {
     case 37: // Esquerda
@@ -38,6 +41,7 @@ function move(){
   }
 }
 
+// Gera comida (se não existir)
 function createRandomPiece(left, top){
   if(!pieceOn){
     piece = newPiece(left, top);
@@ -45,6 +49,7 @@ function createRandomPiece(left, top){
   }
 }
 
+// Verifica se há 'Game Over' e campo-limite do jogo
 function gameOver(){
   let left = getPosition(head, "left");
   let top = getPosition(head, "top");
@@ -62,11 +67,12 @@ function gameOver(){
   }
 }
 
+// Verifica se comeu
 function eatPiece(){
   if(colision(head, piece)){
     pieceOn = false;
     piece.className = "piece tail";
-    snake.push(piece);
+    snake.push(piece); // Comida vira parte do corpo
 
     points.innerText = snake.length-1; // Atualiza os pontos
 
@@ -77,6 +83,7 @@ function eatPiece(){
   }
 }
 
+// Atualiza corpo
 function refreshTail(){
   snake.forEach(function(piece, index, array){
     if(index > 0){

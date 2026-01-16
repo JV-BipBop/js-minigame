@@ -1,11 +1,11 @@
-let time = 500;
+let time = 500; // Tempo do jogo
 let timer = null;
-let direction = null;
+let direction = null; // Direção
 
 btn_top.onclick = () => {direction = 38};
 btn_left.onclick = () => {direction = 37};
 btn_right.onclick = () => {direction = 39};
-btn_botton.onclick = () => {direction = 40};
+btn_botton.onclick = () => {direction = 40}; // Define direções dos botões
 btn_start.onclick = startGame;
 btn_end.onclick = endGame;
 document.body.onkeydown = function (e) {
@@ -27,6 +27,7 @@ function startGame(){
   start(); // Tem que ser criada no sou próprio Javascript
 }
 
+// Finaliza o jogo
 function endGame(){
   clearInterval(timer);
   alert("Game Over");
@@ -34,6 +35,7 @@ function endGame(){
   return true;
 }
 
+// Cria um novo pixel
 function newPiece(left, top){
     piece = document.createElement("div");
     piece.className = "piece";
@@ -43,6 +45,7 @@ function newPiece(left, top){
     return piece;
 }
 
+// Verifica colisão de pixels
 function colision(objA, objB){
   let aLeft = getPosition(objA, "left");
   let aTop = getPosition(objA, "top");
@@ -52,6 +55,7 @@ function colision(objA, objB){
   return (aLeft == bLeft && aTop == bTop)
 }
 
+// Verifica posição do pixel
 function getPosition(obj, direction){  
   return parseInt(obj.style[direction])
 }

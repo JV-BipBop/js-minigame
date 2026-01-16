@@ -1,0 +1,13 @@
+.car{
+  background-color: crimson;
+  z-index: 2;
+}
+
+.edge{
+    background-color: darkgoldenrod;
+}
+
+.obstacle{
+  background-color: darkgoldenrod;
+  z-index: 2;
+}

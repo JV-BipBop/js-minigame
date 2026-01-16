@@ -74,6 +74,8 @@ body{
   width: 200px;
   height: 400px;
   border-radius: 0.2rem;
+
+  overflow: hidden; /* Não renderiza o que estiver fora de tela */
 }
 #field > a{
   display: block;
