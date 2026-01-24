@@ -5,6 +5,7 @@ let edges = [];
 let speed = 20;
 const carY = 300; // limite inferior
 let sideX = [40, 100]; // 40 = carro à esquerda; 100 = carro à direita
+let score = 0; // pontuacao
 // Modela o carro
 const carModel = [
     [20, 0],
@@ -18,10 +19,12 @@ nome_jogo.innerText = "Corrida";
 
 // Criar carro
 function start(){
-    // limpa o campo (segurança extra)
+    // limpa o campo 
     Array.from(field.children).forEach(p => p.remove());
     // Reinicia obstáculos
     obstacles = [];
+    score = 0;
+    document.getElementById("points").innerText = score; // atualiza na tela
 
     // Inicializa carro e parâmetros para posição
     car = []; 
@@ -41,6 +44,26 @@ function loop(){
     moveEdges();
     move();
     moveObstacles();
+
+    if(checkCrash()){
+        endGame();
+    }
+}
+
+function checkCrash(){
+
+    for(let obs of obstacles){
+        for(let pieceObs of obs.pieces){
+            for(let pieceCar of car){
+
+                if(colision(pieceCar, pieceObs)){
+                    return true; // Bateu
+                }
+            }
+        }
+    }
+
+    return false; // Não bateu
 }
 
 // Cria bordas
@@ -157,14 +180,8 @@ function moveObstacles(){
     if(obstacles.length > 0 && obstacles[0].y > 420){
         obstacles[0].pieces.forEach(p => p.remove());
         obstacles.shift();
+
+        score++;
+        document.getElementById("points").innerText = score;
     }
 }
-
-
-
-/*Próximos passos: 
-1 - Verificar colisão carro & obtáculo
-2 - Pontuação
-3 - [EXTRA] aumentar velocidade progressivamente à cada obstáculo
-4 - [EXTRA] botão cima e baixo 'acelera' e 'freia'
-*/
