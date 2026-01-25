@@ -12,12 +12,22 @@ btn_end.onclick = endGame;
 document.body.onkeydown = function (e) {
   if(e.which >= 37 && e.which <=40){ // Teclas direcionais
     direction = e.which;
+    if (e.which === 38) boostPressed = true;
   } else if(e.which == 32){ // Barra de espaço
     startGame();
   } else if(e.which == 19){ // Botão de pause
     endGame();
   }
 };
+document.body.onkeyup = function (e) {
+  if (e.which === 38) { // soltar UP
+    boostPressed = false;
+    if (typeof onBoostEnd === "function") {
+      onBoostEnd();
+    }
+  }
+};
+
 
 // (Re)Inicia o timer do jogo e chama a função start()
 function startGame(){
@@ -65,7 +75,8 @@ function getPosition(obj, direction){
 function updateGameSpeed(newTime){
   if (timer !== null) {
     clearInterval(timer);
-    time = newTime;
+    // trava no mínimo jogável
+    time = Math.max(newTime, MIN_TIME);
     timer = setInterval(loop, time);
   }
 }

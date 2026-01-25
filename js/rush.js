@@ -6,6 +6,10 @@ let speed = 20;
 const carY = 300; // limite inferior
 let sideX = [40, 100]; // 40 = carro à esquerda; 100 = carro à direita
 let score = 0; // pontuacao
+let baseTime = 500;     // velocidade normal (considerando pontuação)
+const BOOST_TIME = 120; // velocidade máxima temporária
+let boosting = false;
+let boostPressed = false;
 // Modela o carro
 const carModel = [
     [20, 0],
@@ -48,6 +52,12 @@ function loop(){
     if(checkCrash()){
         endGame();
     }
+
+    if (boostPressed && !boosting) {
+        boosting = true;
+        updateGameSpeed(BOOST_TIME);
+    }
+
 }
 
 function checkCrash(){
@@ -193,6 +203,11 @@ function moveObstacles(){
                 score++;
                 document.getElementById("points").innerText = score;
 
+                // verifica se o boost foi ativado
+                if (!boosting) {
+                    applyBaseSpeed();
+                }
+
                 // aceleração progressiva
                 if (time > MIN_TIME) {
                     updateGameSpeed(time - 20); // diminui o intervalo → mais rápido
@@ -206,4 +221,14 @@ function moveObstacles(){
         obstacles[0].pieces.forEach(p => p.remove());
         obstacles.shift();
     }
+}
+
+function applyBaseSpeed() {
+    baseTime = Math.max(500 - score * 20, MIN_TIME);
+    updateGameSpeed(baseTime);
+}
+
+function onBoostEnd() {
+    boosting = false;
+    applyBaseSpeed();
 }
