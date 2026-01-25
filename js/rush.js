@@ -51,20 +51,26 @@ function loop(){
 }
 
 function checkCrash(){
+    const carTop = carY;
+    const carBottom = carY + 60;
 
-    for(let obs of obstacles){
-        for(let pieceObs of obs.pieces){
-            for(let pieceCar of car){
+    for (const obs of obstacles) {
 
-                if(colision(pieceCar, pieceObs)){
-                    return true; // Bateu
-                }
-            }
+        // só testa se estiver na mesma faixa
+        if (obs.side !== side) continue;
+
+        const obsTop = obs.y;
+        const obsBottom = obs.y + 60;
+
+        // interseção vertical
+        if (carBottom >= obsTop && carTop <= obsBottom) {
+            return true; // bateu
         }
     }
 
-    return false; // Não bateu
+    return false;
 }
+
 
 // Cria bordas
 function createEdges() {
@@ -139,7 +145,8 @@ function createObstacle() {
     const obs = {
         pieces: [],
         side: Math.floor(Math.random() * 2),
-        y: -80 // Nasce fora de tela
+        y: -80, // Nasce fora de tela
+        scored: false
     };
 
     carModel.forEach(([dx, dy]) => {
@@ -176,12 +183,22 @@ function moveObstacles(){
         });
     });
 
+    obstacles.forEach(obs => {
+        // só conta UMA vez
+        if (!obs.scored) {
+
+            // carro já passou completamente
+            if (obs.y > carY + 60) {
+                obs.scored = true;
+                score++;
+                document.getElementById("points").innerText = score;
+            }
+        }
+    });
+
     // remove obstáculos fora da tela
     if(obstacles.length > 0 && obstacles[0].y > 420){
         obstacles[0].pieces.forEach(p => p.remove());
         obstacles.shift();
-
-        score++;
-        document.getElementById("points").innerText = score;
     }
 }
