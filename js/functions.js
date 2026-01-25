@@ -1,4 +1,5 @@
 let time = 500; // Tempo do jogo
+const MIN_TIME = 120; // limite jogável
 let timer = null;
 let direction = null; // Direção
 
@@ -58,4 +59,13 @@ function colision(objA, objB){
 // Verifica posição do pixel
 function getPosition(obj, direction){  
   return parseInt(obj.style[direction])
+}
+
+// Altera velocidade do jogo
+function updateGameSpeed(newTime){
+  if (timer !== null) {
+    clearInterval(timer);
+    time = newTime;
+    timer = setInterval(loop, time);
+  }
 }

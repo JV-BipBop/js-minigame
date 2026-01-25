@@ -192,6 +192,11 @@ function moveObstacles(){
                 obs.scored = true;
                 score++;
                 document.getElementById("points").innerText = score;
+
+                // aceleração progressiva
+                if (time > MIN_TIME) {
+                    updateGameSpeed(time - 20); // diminui o intervalo → mais rápido
+                }
             }
         }
     });
